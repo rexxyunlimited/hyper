@@ -237,6 +237,233 @@ How HYPERCURE Works Inside Your Body
 </form>
 </section>
 
+<script>
+const stateToLGA = {
+  "Abia": ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala Ngwa North", "Isiala Ngwa South", "Isuikwuato", "Obi Ngwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umuahia North", "Umuahia South", "Umu Nneochi"],
+  "Adamawa": ["Demsa", "Fufure", "Ganye", "Gayuk", "Gombi", "Grie", "Hong", "Jada", "Larmurde", "Madagali", "Maiha", "Mayo Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"],
+  "Akwa Ibom": ["Abak", "Eastern Obolo", "Eket", "Esit Eket", "Essien Udim", "Etim Ekpo", "Etinan", "Ibeno", "Ibesikpo Asutan", "Ibiono-Ibom", "Ika", "Ikono", "Ikot Abasi", "Ikot Ekpene", "Ini", "Itu", "Mbo", "Mkpat-Enin", "Nsit-Atai", "Nsit-Ibom", "Nsit-Ubium", "Obot Akara", "Okobo", "Onna", "Oron", "Oruk Anam", "Udung-Uko", "Ukanafun", "Uruan", "Urue-Offong/Oruko", "Uyo"], 
+  "Anambra": ["Aguata", "Anambra East", "Anambra West", "Anaocha", "Awka North", "Awka South", "Ayamelum", "Dunukofia", "Ekwusigo", "Idemili North", "Idemili South", "Ihiala", "Njikoka", "Nnewi North", "Nnewi South", "Ogbaru", "Onitsha North", "Onitsha South", "Orumba North", "Orumba South", "Oyi"], 
+  "Bauchi": ["Alkaleri", "Bauchi", "Bogoro", "Damban", "Darazo", "Dass", "Gamawa", "Ganjuwa", "Giade", "Itas/Gadau", "Jama'are", "Katagum", "Kirfi", "Misau", "Ningi", "Shira", "Tafawa Balewa", "Toro", "Warji", "Zaki"], 
+  "Bayelsa": ["Brass", "Ekeremor", "Kolokuma/Opokuma", "Nembe", "Ogbia", "Sagbama", "Southern Ijaw", "Yenagoa"],
+  "Benue": ["Ado", "Agatu", "Apa", "Buruku", "Gboko", "Guma", "Gwer East", "Gwer West", "Katsina-Ala", "Konshisha", "Kwande", "Logo", "Makurdi", "Obi", "Ogbadibo", "Ohimini", "Oju", "Okpokwu", "Oturkpo", "Tarka", "Ukum", "Ushongo", "Vandeikya"], "Borno": ["Abadam", "Askira/Uba", "Bama", "Bayo", "Biu", "Chibok", "Damboa", "Dikwa", "Gubio", "Guzamala", "Gwoza", "Hawul", "Jere", "Kaga", "Kala/Balge", "Konduga", "Kukawa", "Kwaya Kusar", "Mafa", "Magumeri", "Maiduguri", "Marte", "Mobbar", "Monguno", "Ngala", "Nganzai", "Shani"], 
+  "Cross River": ["Abi", "Akamkpa", "Akpabuyo", "Bakassi", "Bekwarra", "Biase", "Boki", "Calabar Municipal", "Calabar South", "Etung", "Ikom", "Obanliku", "Obubra", "Obudu", "Odukpani", "Ogoja", "Yakuur", "Yala"], "Delta": ["Aniocha North", "Aniocha South", "Bomadi", "Burutu", "Ethiope East", "Ethiope West", "Ika North East", "Ika South", "Isoko North", "Isoko South", "Ndokwa East", "Ndokwa West", "Okpe", "Oshimili North", "Oshimili South", "Patani", "Sapele", "Udu", "Ughelli North", "Ughelli South", "Ukwuani", "Uvwie", "Warri North", "Warri South", "Warri South West"], 
+  "Ebonyi": ["Abakaliki", "Afikpo North", "Afikpo South", "Ebonyi", "Ezza North", "Ezza South", "Ikwo", "Ishielu", "Ivo", "Izzi", "Ohaozara", "Ohaukwu", "Onicha"], 
+  "Edo": ["Akoko-Edo", "Egor", "Esan Central", "Esan North-East", "Esan South-East", "Esan West", "Etsako Central", "Etsako East", "Etsako West", "Igueben", "Ikpoba Okha", "Orhionmwon", "Oredo", "Ovia North-East", "Ovia South-West", "Owan East", "Owan West", "Uhunmwonde"], "Ekiti": ["Ado Ekiti", "Efon", "Ekiti East", "Ekiti South-West", "Ekiti West", "Emure", "Gbonyin", "Ido Osi", "Ijero", "Ikere", "Ikole", "Ilejemeje", "Irepodun/Ifelodun", "Ise/Orun", "Moba", "Oye"], 
+  "Enugu": ["Aninri", "Awgu", "Enugu East", "Enugu North", "Enugu South", "Ezeagu", "Igbo Etiti", "Igbo Eze North", "Igbo Eze South", "Isi Uzo", "Nkanu East", "Nkanu West", "Nsukka", "Oji River", "Udenu", "Udi", "Uzo-Uwani"], "FCT": ["Abuja", "Bwari", "Gwagwalada", "Kuje", "Kwali"], "Gombe": ["Akko", "Balanga", "Billiri", "Dukku", "Funakaye", "Gombe", "Kaltungo", "Kwami", "Nafada", "Shongom", "Yamaltu/Deba"], 
+  "Imo": ["Aboh Mbaise", "Ahiazu Mbaise", "Ehime Mbano", "Ezinihitte", "Ideato North", "Ideato South", "Ihitte/Uboma", "Ikeduru", "Isiala Mbano", "Isu", "Mbaitoli", "Ngor Okpala", "Njaba", "Nkwerre", "Nwangele", "Obowo", "Oguta", "Ohaji/Egbema", "Okigwe", "Orlu", "Orsu", "Oru East", "Oru West", "Owerri Municipal", "Owerri North", "Owerri West", "Unuimo"], "Jigawa": ["Auyo", "Babura", "Biriniwa", "Birnin Kudu", "Buji", "Dutse", "Gagarawa", "Garki", "Gumel", "Guri", "Gwaram", "Gwiwa", "Hadejia", "Jahun", "Kafin Hausa", "Kazaure", "Kiri Kasama", "Kiyawa", "Kaugama", "Maigatari", "Malam Madori", "Miga", "Ringim", "Roni", "Sule Tankarkar", "Taura", "Yankwashi"], 
+  "Kaduna": ["Birnin Gwari", "Chikun", "Giwa", "Igabi", "Ikara", "Jaba", "Jema'a", "Kachia", "Kaduna North", "Kaduna South", "Kagarko", "Kajuru", "Kaura", "Kauru", "Kubau", "Kudan", "Lere", "Makarfi", "Sabon Gari", "Sanga", "Soba", "Zangon Kataf", "Zaria"],
+  "Kano": ["Ajingi", "Albasu", "Bagwai", "Bebeji", "Bichi", "Bunkure", "Dala", "Dambatta", "Dawakin Kudu", "Dawakin Tofa", "Doguwa", "Fagge", "Gabasawa", "Garko", "Garun Mallam", "Gaya", "Gezawa", "Gwale", "Gwarzo", "Kabo", "Kano Municipal", "Karaye", "Kibiya", "Kiru", "Kumbotso", "Kunchi", "Kura", "Madobi", "Makoda", "Minjibir", "Nasarawa", "Rano", "Rimin Gado", "Rogo", "Shanono", "Sumaila", "Takai", "Tarauni", "Tofa", "Tsanyawa", "Tudun Wada", "Ungogo", "Warawa", "Wudil"],
+  "Katsina": ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dandume", "Danja", "Dan Musa", "Daura", "Dutsi", "Dutsin Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai'Adua", "Malumfashi", "Mani", "Mashi", "Matazu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"],
+  "Kebbi": ["Aleiro", "Arewa Dandi", "Argungu", "Augie", "Bagudo", "Birnin Kebbi", "Bunza", "Dandi", "Fakai", "Gwandu", "Jega", "Kalgo", "Koko/Besse", "Maiyama", "Ngaski", "Sakaba", "Shanga", "Suru", "Wasagu/Danko", "Yauri", "Zuru"], 
+  "Kogi": ["Adavi", "Ajaokuta", "Ankpa", "Bassa", "Dekina", "Ibaji", "Idah", "Igalamela Odolu", "Ijumu", "Kabba/Bunu", "Kogi", "Lokoja", "Mopa Muro", "Ofu", "Ogori/Magongo", "Okehi", "Okene", "Olamaboro", "Omala", "Yagba East", "Yagba West"], 
+  "Kwara": ["Asa", "Baruten", "Edu", "Ekiti", "Ifelodun", "Ilorin East", "Ilorin South", "Ilorin West", "Irepodun", "Isin", "Kaiama", "Moro", "Offa", "Oke Ero", "Oyun", "Pategi"], "Lagos": ["Agege", "Ajeromi-Ifelodun", "Alimosho", "Amuwo-Odofin", "Apapa", "Badagry", "Epe", "Eti Osa", "Ibeju-Lekki", "Ifako-Ijaiye", "Ikeja", "Ikorodu", "Kosofe", "Lagos Island", "Lagos Mainland", "Mushin", "Ojo", "Oshodi-Isolo", "Shomolu", "Surulere"], "Nasarawa": ["Akwanga", "Awe", "Doma", "Karu", "Keana", "Keffi", "Kokona", "Lafia", "Nasarawa", "Nasarawa Egon", "Obi", "Toto", "Wamba"],
+  "Niger": ["Agaie", "Agwara", "Bida", "Borgu", "Bosso", "Chanchaga", "Edati", "Gbako", "Gurara", "Katcha", "Kontagora", "Lapai", "Lavun", "Magama", "Mariga", "Mashegu", "Mokwa", "Munya", "Paikoro", "Rafi", "Rijau", "Shiroro", "Suleja", "Tafa", "Wushishi"], 
+  "Ogun": ["Abeokuta North", "Abeokuta South", "Ado-Odo/Ota", "Egbado North", "Egbado South", "Ewekoro", "Ifo", "Ijebu East", "Ijebu North", "Ijebu North East", "Ijebu Ode", "Ikenne", "Imeko Afon", "Ipokia", "Obafemi Owode", "Odeda", "Odogbolu", "Ogun Waterside", "Remo North", "Shagamu"],
+  "Ondo": ["Akoko North-East", "Akoko North-West", "Akoko South-East", "Akoko South-West", "Akure North", "Akure South", "Ese Odo", "Idanre", "Ifedore", "Ilaje", "Ile Oluji/Okeigbo", "Irele", "Odigbo", "Okitipupa", "Ondo East", "Ondo West", "Ose", "Owo"], 
+  "Osun": ["Aiyedade", "Aiyedire", "Atakunmosa East", "Atakunmosa West", "Boluwaduro", "Boripe", "Ede North", "Ede South", "Egbedore", "Ejigbo", "Ife Central", "Ife East", "Ife North", "Ife South", "Ifedayo", "Ifelodun", "Ila", "Ilesa East", "Ilesa West", "Irepodun", "Irewole", "Isokan", "Iwo", "Obokun", "Odo Otin", "Ola Oluwa", "Olorunda", "Oriade", "Orolu", "Osogbo"], "Oyo": ["Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan North", "Ibadan North-East", "Ibadan North-West", "Ibadan South-East", "Ibadan South-West", "Ibarapa Central", "Ibarapa East", "Ibarapa North", "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu", "Ogbomosho North", "Ogbomosho South", "Ogo Oluwa", "Olorunsogo", "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West", "Saki East", "Saki West", "Surulere"], "Plateau": ["Barkin Ladi", "Bassa", "Bokkos", "Jos East", "Jos North", "Jos South", "Kanam", "Kanke", "Langtang North", "Langtang South", "Mangu", "Mikang", "Pankshin", "Qua'an Pan", "Riyom", "Shendam", "Wase"], "Rivers": ["Abua/Odual", "Ahoada East", "Ahoada West", "Akuku-Toru", "Andoni", "Asari-Toru", "Bonny", "Degema", "Eleme", "Emuoha", "Etche", "Gokana", "Ikwerre", "Khana", "Obio/Akpor", "Ogba/Egbema/Ndoni", "Ogu/Bolo", "Okrika", "Omuma", "Opobo/Nkoro", "Oyigbo", "Port Harcourt", "Tai"], "Sokoto": ["Binji", "Bodinga", "Dange Shuni", "Gada", "Goronyo", "Gudu", "Gwadabawa", "Illela", "Isa", "Kebbe", "Kware", "Rabah", "Sabon Birni", "Shagari", "Silame", "Sokoto North", "Sokoto South", "Tambuwal", "Tangaza", "Tureta", "Wamako", "Wurno", "Yabo"], "Taraba": ["Ardo Kola", "Bali", "Donga", "Gashaka", "Gassol", "Ibi", "Jalingo", "Karim Lamido", "Kurmi", "Lau", "Sardauna", "Takum", "Ussa", "Wukari", "Yorro", "Zing"], "Yobe": ["Bade", "Bursari", "Damaturu", "Fika", "Fune", "Geidam", "Gujba", "Gulani", "Jakusko", "Karasuwa", "Machina", "Nangere", "Nguru", "Potiskum", "Tarmuwa", "Yunusari", "Yusufari"], "Zamfara": ["Anka", "Bakura", "Birnin Magaji/Kiyaw", "Bukkuyum", "Bungudu", "Gummi", "Gusau", "Kaura Namoda", "Maradun", "Maru", "Shinkafi", "Talata Mafara", "Chafe", "Zurmi"] };
+const stateSelect = document.getElementById('state');
+const lgaSelect = document.getElementById('lga');
+
+// Populate states
+for (let state in stateToLGA) {
+  const option = document.createElement('option');
+  option.value = state;
+  option.textContent = state;
+  stateSelect.appendChild(option);
+}
+
+// Handle state change
+stateSelect.addEventListener('change', function() {
+  const selectedState = this.value;
+  lgaSelect.innerHTML = '';
+  if (selectedState && stateToLGA[selectedState]) {
+    lgaSelect.disabled = false;
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Select LGA --';
+    lgaSelect.appendChild(defaultOption);
+    stateToLGA[selectedState].forEach(lga => {
+      const option = document.createElement('option');
+      option.value = lga;
+      option.textContent = lga;
+      lgaSelect.appendChild(option);
+    });
+  } else {
+    lgaSelect.disabled = true;
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = '-- Select State First --';
+    lgaSelect.appendChild(option);
+  }
+});
+
+// Validation for phone numbers
+document.getElementById("orderForm").addEventListener("submit", async function(event) {
+  const phone = document.getElementById("phone").value.trim();
+  const altPhone = document.getElementById("alt-phone").value.trim();
+  const phoneRegex = /^\d{11}$/;
+
+  if (!phoneRegex.test(phone) || !phoneRegex.test(altPhone)) {
+    alert("Both phone numbers must be exactly 11 digits.");
+    event.preventDefault();
+    return false;
+  }
+
+  // Formspree submission
+  event.preventDefault();
+  let response = await fetch(this.action, {
+    method: this.method,
+    body: new FormData(this),
+    headers: { 'Accept': 'application/json' }
+  });
+
+  if (response.ok) {
+    window.location.href = "thankyou.html";
+  } else {
+    alert("Something went wrong. Please try again.");
+  }
+});
+</script>
+ </section>
+ 
+<section class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <button class="faq-question">Is this safe for adults with high blood pressure?</button>
+      <div class="faq-answer">Yes, when used as directed. Consult your healthcare provider if unsure or if taking blood pressure medications.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">How many bottles do I need?</button>
+      <div class="faq-answer">Most users start with 2–3 bottles for optimal support, depending on their blood pressure levels and overall health.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question">How fast will I notice changes?</button>
+      <div class="faq-answer">Many people notice more stable blood pressure readings within 2–4 weeks, with clearer improvements over 1–2 months.</div>
+    </div>
+</section>
+
+
+<section class="comments-section">
+  <h2>Comments</h2>
+
+  <div class="comment">
+    <img src="img/ab.jpg" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Oloye Remilekun</strong> Can anybody vouch for this product??</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>6 · 1h</span>
+      </div>
+
+      <!-- Nested Reply -->
+      <div class="reply">
+        <img src="img/Screenshot.png" alt="Profile picture" class="avatar">
+        <div class="comment-content">
+          <p><strong>Mahmud Kayode</strong> Yes, I got it for my father. His blood pressure used to spike all the time. After using this, his readings became more stable and he feels more energetic. He followed the dosage exactly. It’s definitely helpful!</p>
+          <img src="img/GOOD TORCH.jpg" alt="Me using the product" class="reply-photo">
+          <div class="comment-actions">
+            <span>Like</span> · <span>Reply</span> · <span>2 · 30 min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>2 · 24 min</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <img src="img/abcd.jpg" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Fasoyinu Oyedamola</strong> Yes, it helped me when I was struggling with constant headaches and dizziness from high BP. If you're tired of spending money on things that don’t work, this might surprise you. It worked for me!</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>2 · 24 min</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <img src="img/www.png" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Cynthia Obodo</strong> I bought mine full price and now it's 30% off? Not fair 😩</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>4 · 51 min</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <img src="img/qqq.png" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Adebayo Yetunde</strong> How long does delivery take?</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>6 · 1h</span>
+      </div>
+
+      <!-- Nested Reply -->
+      <div class="reply">
+        <img src="img/t.png" alt="Profile picture" class="avatar">
+        <div class="comment-content">
+          <p><strong>Mama Abbas</strong> Hello, I got mine after one day in Lagos. Fast delivery.</p>
+          <div class="comment-actions">
+            <span>Like</span> · <span>Reply</span> · <span>2 · 24 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <img src="img/police.png" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Abdul Fatai</strong> Same here, my uncle’s own is on the way. Hoping it works like the others said 🙏</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>7 · 1h</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Testimonials Added -->
+  <div class="comment">
+    <img src="img/p4.png.jpg" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Chinenye Uzo</strong> I was feeling drained all the time because of my high blood pressure. I’ve used this product for 2 months now, and I have real energy again! I’m hopeful.</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>11 · 2h</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <img src="img/abc.jpg" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Rukayat Ajayi</strong> I’ve wasted money on many products before, but this one is different. It started helping me in about 2 weeks. My BP feels more stable now.</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>8 · 1h</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <img src="img/p3.png.jpg" alt="Profile picture" class="avatar">
+    <div class="comment-content">
+      <p><strong>Justin Ojo</strong> I was unsure, but after 3 weeks my energy is better and my blood pressure readings are more stable. God bless whoever made this available 🙌</p>
+      <div class="comment-actions">
+        <span>Like</span> · <span>Reply</span> · <span>13 · 3h</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fake Comment Form -->
+  <div class="write-comment">
+    <img src="img/GOOD TORCH.jpg" alt="Your Profile" class="avatar">
+    <input type="text" id="comment-input" placeholder="Write a comment..." />
+    <button id="send-comment">Send</button>
+  </div>
+  <div id="comment-toast" class="toast">Comment sent!</div>
+
+</section>
+ 
 <footer>
 <p>&copy; 2025 MAXWELL Health. All rights reserved.</p>
 </footer>
